@@ -1,3 +1,3 @@
 # COSC3380-MW-Team4
 
-Benjamin Price
+Jose Sanchez Gonzalez and Sevban Sonmez and Benjamin Price
