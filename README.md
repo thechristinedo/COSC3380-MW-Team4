@@ -1,2 +1,4 @@
 # COSC3380-MW-Team4
-Sevban Sonmez
+
+Jose Sanchez Gonzalez and Sevban Sonmez
+
