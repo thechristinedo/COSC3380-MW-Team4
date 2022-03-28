@@ -2,4 +2,4 @@
 
 ## Music Library Website Project
 
-Jose Sanchez Gonzalez and Sevban Sonmez and Benjamin Price and Christine Do
+Jose Sanchez Gonzalez and Sevban Sonmez and Benjamin Price and Christine Do and Laney Tran
