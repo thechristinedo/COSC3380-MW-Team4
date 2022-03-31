@@ -1,0 +1,17 @@
+body{
+    font-family: sans-serif;
+    width: 50%;
+    margin: auto;
+}
+
+img {
+    width: 80%;
+    height: 100%;
+}
+
+.card {
+    box-shadow: 10px 10px 5px 0px rgba(238, 238, 238, 1);
+    margin: 15px;
+    text-align: center;
+    padding-bottom: 10px;
+}
