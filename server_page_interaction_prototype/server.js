@@ -1,12 +1,21 @@
 const http = require('http');
 const fs = require('fs');
 
-const { hostname, port } = require('./src/contants')
+const { hostname, port } = require('./src/contants');
+const { resourceLimits } = require('worker_threads');
 
-function return_static_file(request, response) {
+async function return_static_file(request, response) {
     if (request.url === '/' ) { // Default to index page?
         file_path = './index.html';
         content_type = 'text/html';
+    }
+    else if (request.url == '/requests') {
+        const buffers = [];    
+        for await (const chunk of request) {
+            buffers.push(chunk);
+        }
+        console.log(buffers.toString());
+        return;
     }
     else {
         file_path = '.' + request.url;
