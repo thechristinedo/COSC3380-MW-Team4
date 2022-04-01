@@ -30,6 +30,10 @@ Http.onreadystatechange=function() {
     if (this.readyState == 4 && this.status == 200) {
         console.log(JSON.parse(this.responseText));
         const xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "/requests");
+        xmlhttp.setRequestHeader("Content-type", "application/json");
+        const content = JSON.stringify({'Username': 'First User', 'Password': '7654321'});
+        xmlhttp.send(content);
     }
 }
 
