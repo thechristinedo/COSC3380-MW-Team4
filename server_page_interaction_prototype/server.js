@@ -11,11 +11,17 @@ function return_static_file(request, response) {
     else {
         file_path = '.' + request.url;
         const extension = request.url.split('.').pop();
-        if (extension === 'css') {
+        if (request.method === 'POST') {
+            
+        }
+        else if (extension === 'css') {
             content_type = 'text/css'; // gonna need a switch case for the end of the URL
         }
         else if (extension === 'js') {
             content_type = 'text/javascript';
+        }
+        else if (extension === 'png') {
+            content_type = 'image/png';  
         }
         else {
             content_type = 'text/plain';
