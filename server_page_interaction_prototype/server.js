@@ -9,21 +9,19 @@ async function return_static_file(request, response) {
         file_path = './index.html';
         content_type = 'text/html';
     }
-    else if (request.url == '/requests') {
+    else if (request.url == '/requests' || request.method === 'POST') {
         const buffers = [];    
         for await (const chunk of request) {
             buffers.push(chunk);
         }
         console.log(buffers.toString());
+        response.end();
         return;
     }
     else {
         file_path = '.' + request.url;
         const extension = request.url.split('.').pop();
-        if (request.method === 'POST') {
-            
-        }
-        else if (extension === 'css') {
+        if (extension === 'css') {
             content_type = 'text/css'; // gonna need a switch case for the end of the URL
         }
         else if (extension === 'js') {
