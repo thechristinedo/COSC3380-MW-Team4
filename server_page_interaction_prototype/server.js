@@ -48,6 +48,30 @@ http.createServer(return_static_file).listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`)
 });
 
+
+//Create connection
+var mysql      = require('./node_modules/mysql');
+var connection = mysql.createConnection({
+  host     : 'cosc3380-mw-team4.ce2wtehy81sy.us-east-1.rds.amazonaws.com',
+  port : '3380',
+  user     : 'admin',
+  password : 'Team4!!!',
+  database : 'Team4_Music_Site'
+});
+connection.connect();
+
+connection.query('SELECT * FROM `SONG`', function (error, results) {
+    if (error){                     // error will be an Error if one occurred during the query
+        console.log('Error');
+        throw error;
+    }
+    console.log(results);    // results will contain the results of the query
+  });
+
+connection.end();
+
+
+
 // const hostname = '172.31.21.219'; // Our hostname per AWS
 // const port = 80; // Default HTTP port
 //
