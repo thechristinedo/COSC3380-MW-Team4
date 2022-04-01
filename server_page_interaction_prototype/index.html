@@ -22,4 +22,27 @@
             <img src="https://i0.wp.com/therighthairstyles.com/wp-content/uploads/2014/03/13-flat-twist-with-twist-out-2.jpg?w=500&ssl=1"/>
         </div> -->
     </body>
+    <form target="frame" action="/requests">
+        <div class="imageshere1">
+          <img src="profile.png" alt="Avatar" class="profilepicture">
+        </div>
+      
+        <div class="container">
+          <label for="uname"><b>Username:</b></label>
+          <input type="text" placeholder="Please Enter Username" name="uname" required>
+      
+          <label for="psw"><b>Password:</b></label>
+          <input type="password" placeholder="Please Enter Password" name="psw" required>
+        
+          <button type="submit" name="loginname" formmethod="POST">Login</button>
+          <label>
+            <input type="checkbox" checked="checked" name="remember"> Remember me
+          </label>
+        </div>
+      
+        <div class="container" style="background-color:#f0efef">
+          <span class="psw"><a href="#">Forgot password?</a></span>
+        </div>
+      </form>
 </html>
+<iframe name="frame"></iframe>
