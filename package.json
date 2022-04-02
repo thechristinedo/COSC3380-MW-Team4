@@ -1,0 +1,38 @@
+{
+  "name": "client-fuel-quote-website",
+  "version": "1.0.0",
+  "description": "REST APIs are being served on `localhost:3000` you can change host and port on `config/config.js` ### Requirements to build & deploy backend  - node     - v16.13.1  - express    - 4.16.1  - npm     - 8.1.2",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "mocha --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomas99tran/Client-Fuel-Quote-Website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomas99tran/Client-Fuel-Quote-Website/issues"
+  },
+  "homepage": "https://github.com/thomas99tran/Client-Fuel-Quote-Website#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.2.1",
+    "sequelize": "^6.17.0",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "nodemon": "^2.0.15"
+  }
+}
