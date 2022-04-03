@@ -24,6 +24,7 @@ CREATE TABLE ALBUM (
     title VARCHAR(20) NOT NULL,
     user_id INT NOT NULL,
     date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+    song_cout INT NOT NULL DEFAULT(0),
     PRIMARY KEY (id)
 );
 
