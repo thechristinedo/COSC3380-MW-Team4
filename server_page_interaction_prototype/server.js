@@ -2,9 +2,8 @@ const http = require('http');
 const fs = require('fs');
 
 const { hostname, port } = require('./src/contants');
-const { resourceLimits } = require('worker_threads');
 
-async function return_static_file(request, response) {
+async function handle_requests(request, response) {
     if (request.url === '/' ) { // Default to index page?
         file_path = './index.html';
         content_type = 'text/html';
@@ -30,31 +29,16 @@ async function return_static_file(request, response) {
             content_type = 'text/plain';
         }
     }
-    fs.readFile(file_path, function (err, html) {
+    fs.readFile(file_path, function (err, content) {
         if (err) {
             throw err;
         }
         response.writeHead(200, {"Content-Type": content_type});
-        response.write(html);
+        await response.write(content);
         response.end();
     });
 }
 
-http.createServer(return_static_file).listen(port, hostname, () => {
+http.createServer(handle_requests).listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`)
 });
-
-// const hostname = '172.31.21.219'; // Our hostname per AWS
-// const port = 80; // Default HTTP port
-//
-// function server_function(req, res) {
-//  res.statusCode = 200;
-//  res.setHeader('Content-type', 'text/plain');
-//  res.end('Hello world!');
-// }
-//
-// const server = http.createServer(server_function);
-//
-// server.listen(port, hostname, () => {
-//  console.log(`Server running at http://${hostname}:${port}/`);
-// });
