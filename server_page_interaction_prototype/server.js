@@ -8,12 +8,13 @@ async function handle_requests(request, response) {
         file_path = './index.html';
         content_type = 'text/html';
     }
-    else if (request.url == '/requests') {
+    else if (request.url == '/requests' || request.method === 'POST') {
         const buffers = [];    
         for await (const chunk of request) {
             buffers.push(chunk);
         }
         console.log(buffers.toString());
+        response.end();
         return;
     }
     else {
@@ -25,16 +26,21 @@ async function handle_requests(request, response) {
         else if (extension === 'js') {
             content_type = 'text/javascript';
         }
+        else if (extension === 'png') {
+            content_type = 'image/png';  
+        }
         else {
             content_type = 'text/plain';
         }
     }
     fs.readFile(file_path, function (err, content) {
         if (err) {
-            throw err;
+            response.writeHead(404);
+            response.end();
+            return;
         }
         response.writeHead(200, {"Content-Type": content_type});
-        await response.write(content);
+        response.write(content);
         response.end();
     });
 }
@@ -42,3 +48,25 @@ async function handle_requests(request, response) {
 http.createServer(handle_requests).listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`)
 });
+
+
+//Create connection
+var mysql      = require('./node_modules/mysql');
+var connection = mysql.createConnection({
+  host     : 'cosc3380-mw-team4.ce2wtehy81sy.us-east-1.rds.amazonaws.com',
+  port : '3380',
+  user     : 'admin',
+  password : 'Team4!!!',
+  database : 'Team4_Music_Site'
+});
+connection.connect();
+
+connection.query('SELECT * FROM `SONG`', function (error, results) {
+    if (error){                     // error will be an Error if one occurred during the query
+        console.log('Error');
+        throw error;
+    }
+    console.log(results);    // results will contain the results of the query
+  });
+
+connection.end();
