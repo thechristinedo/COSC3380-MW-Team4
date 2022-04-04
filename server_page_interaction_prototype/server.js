@@ -3,7 +3,6 @@ const fs = require('fs');
 const mysql = require('./node_modules/mysql');
 
 const { hostname, port } = require('./src/contants');
-const { userInfo } = require('os');
 
 //Create connection
 const connection = mysql.createConnection({
@@ -36,8 +35,6 @@ async function handle_post_requests(request, response) {
                 response.end();
             }
             else {
-                console.log(results);
-                console.log(Object.keys(results));
                 response.writeHead(200);
                 response.write(JSON.stringify({'Accepted': true, 'UserID': results['0'].id}));
                 response.end();
