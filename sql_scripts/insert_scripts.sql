@@ -84,3 +84,6 @@ WHERE song_id = 4;
 UPDATE SONG
 SET album_id = 2
 WHERE id = 4;
+
+INSERT INTO USER (name, password)
+VALUES ("hey", "hello34");
