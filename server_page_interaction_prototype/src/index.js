@@ -8,6 +8,16 @@ function send_request() {
     Http.send();
 }
 
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path =/";
+}
+
 Http.onreadystatechange=function() {
     if (this.readyState == 4 && this.status == 200) {
         const resp = JSON.parse(this.responseText);
@@ -30,6 +40,19 @@ Http.onreadystatechange=function() {
         xmlhttp.open("POST", "/requests");
         xmlhttp.setRequestHeader("Content-type", "application/json");
         const content = JSON.stringify({'Username': 'First User', 'Password': '7654321'});
+
+        var userCounter;
+        if (document.cookie == '') {
+            userCounter = 1;
+            setCookie('User', userCounter, 1);
+        }
+        else {
+            var holder = document.cookie.substring(5);
+            console.log(document.cookie[5]);
+            userCounter = parseInt(holder) + 1;
+            setCookie('User', userCounter, 1);
+        }
+
         xmlhttp.send(content);
     }
 }
