@@ -162,6 +162,23 @@ input[type="radio"] {
     text-decoration: underline;
 }
 
+.underlogin {
+    float: right;
+    display: inline;
+    width: 50%;
+    margin-bottom: 10px;
+}
+
+.remember {
+    padding-top: 5px;
+    padding-left: 2px;
+}
+
+.pass-link {
+    padding-left: 38px;
+    /* text-align: 35px; */
+}
+
 form .btn {
     height: 50px;
     width: 100%;
