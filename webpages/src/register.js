@@ -26,5 +26,5 @@ loginRedirect.onclick = (()=> {
         if password user doesn't exist in database, then render error banner
         else link to user's page
     */
-    location.href = "user.html";
+    location.href = "https://github.com/alisonix/COSC3380-MW-Team4/blob/508dff5c02bf4aecb75b5da31eee0a7e65ab59e1/webpages/html/user.html";
 });
