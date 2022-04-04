@@ -4,7 +4,7 @@ const mysql = require('./node_modules/mysql');
 
 const { hostname, port } = require('./src/contants');
 
-//Create connection
+//Create connection to our database
 const connection = mysql.createConnection({
   host     : 'cosc3380-mw-team4.ce2wtehy81sy.us-east-1.rds.amazonaws.com',
   port : '3380',
@@ -29,7 +29,7 @@ async function handle_post_requests(request, response) {
                 response.end();
                 throw error;
             }
-            if (Object.keys(results).length === 0) {
+            if (Object.keys(results).length === 0) { // Username/Password combo not found in database
                 response.writeHead(200);
                 response.write(JSON.stringify({'Accepted': false}));
                 response.end();
@@ -59,7 +59,7 @@ async function server_handler(request, response) {
         file_path = './index.html';
         content_type = 'text/html';
     }
-    else if (request.url.substr(0,8) === '/posts' || request.method === 'POST') {
+    else if (request.url.substr(0,6) === '/posts' || request.method === 'POST') {
         handle_post_requests(request, response);
         return;
     }

@@ -36,6 +36,7 @@ const handle_login = (event) => {
         if (data.Accepted) {
             setCookie("UserID", data.UserID, 1);
             // Put logic for loading user profile page here
+            alert("We'd log you in if we could but for now take this message!")
         }
         else {
             alert("Sorry that username or password was incorrect!")    
