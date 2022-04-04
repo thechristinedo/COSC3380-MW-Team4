@@ -52,3 +52,35 @@ INSERT INTO RATING (user_id, song_id, rating) VALUE (
 INSERT INTO RATING (user_id, song_id, rating) VALUE (
 	3, 2, 1
 );
+
+INSERT INTO PLAYLIST(title, user_id) VALUES
+(
+	"playlist test to del",
+	4
+);
+
+INSERT INTO SONG_PLAYLIST (playlist_id, song_id) VALUE(
+	3,
+    (SELECT s.id FROM SONG s WHERE (s.title = "First Delete Test So"))
+);
+
+INSERT INTO ALBUM (title, user_id) VALUES
+(	"Album one to testDel", 
+	"4"
+);
+
+DELETE FROM PLAYLIST
+WHERE id = 3;
+
+DELETE FROM SONG
+WHERE id = 4;
+
+DELETE FROM ALBUM
+WHERE id = 2
+
+DELETE FROM SONG_PLAYLIST
+WHERE song_id = 4;
+
+UPDATE SONG
+SET album_id = 2
+WHERE id = 4;
