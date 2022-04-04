@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Login & Sign Up Form</title>
+        <link rel="stylesheet" href="https://github.com/alisonix/COSC3380-MW-Team4/blob/af07c284fabb4644258ae1e069da3d6bb37f590e/webpages/src/registerstyles.css">
+        <meta name="viewport" content="width=device.width, initial-scale=1.0">
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="title-text">
+                <div class="title login">Login</div>
+                <div class="title signin">Sign Up</div>
+            </div>
+            <div class="form-container">
+                <div class="slide-controls">
+                    <input type="radio" name = "slide" id="login" checked>
+                    <input type="radio" name = "slide" id="signup">
+                    <label for="login" class = "slide login">Login</label>
+                    <label for="signup" class = "slide signup">Sign Up</label>
+                    <div class="slider-tab"></div>
+                </div>
+                <div class="form-inner">
+                    <form action="#" class="login">
+                        <div class="field">
+                            <input type="text" placeholder="Username" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="pass-link"><a href="#">Forgot Password?</a></div>
+                        <div id="submit-btn" class="field btn">
+                            <div class="btn-layer"></div>
+                            <input type="submit" value = "Login">
+                        </div>
+                        <div class="signup-link"> Not A Member? <a href="#">Sign Up Now!</a>
+                        </div>
+                    </form>
+                    <form action="#" class = "signup">
+                        <div class="field">
+                            <input type="text" placeholder="Username" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Password" required>
+                        </div>
+                        <div class="field">
+                            <input type="password" placeholder="Confirm Password" required>
+                        </div>
+                        <div class="field btn">
+                            <div class="btn-layer"></div>
+                            <input type="submit" value = "Signup">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="https://github.com/alisonix/COSC3380-MW-Team4/blob/19759338e87eaf89339a25a3d30399a5c7e94694/webpages/src/register.js"> </script>
+    </body>
+</html>
