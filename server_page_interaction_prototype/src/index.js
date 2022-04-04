@@ -4,7 +4,6 @@ const body = document.querySelector('body');
 
 function send_request() {
     Http.open("GET", '/data/data.json');
-
     Http.send();
 }
 
@@ -16,6 +15,41 @@ function setCookie(name, value, days) {
         expires = "; expires=" + date.toUTCString();
     }
     document.cookie = name + "=" + value + expires + "; path =/";
+}
+
+async function postLogin(data) {
+    const response = await fetch('/posts/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application.json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json();
+}
+
+const handle_login = (event) => {
+    const cd = document.cookie;
+    const form = new FormData(event.target);
+    const username = form.get("uname");
+    const password = form.get("psw");
+    
+    const response = postLogin({Username: username, Password: password});
+    response.then(data => {
+        // Data will be an object with one or two keys. It has Accepted, a boolean indicating if
+        // the login request is accepted. If it is, then the object also has the key UserID, corresponding 
+        // to the ID of the user in the database internally. This is insanely insecure but will work for our
+        // demo.
+        if (data.Accepted) {
+            console.log(data);
+            setCookie("UserID", data.UserID, 1);
+            // Put logic for loading user profile page here
+        }
+        else {
+            alert("Sorry that username or password was incorrect!")    
+        }
+    })
+    return false;
 }
 
 Http.onreadystatechange=function() {
@@ -57,7 +91,6 @@ Http.onreadystatechange=function() {
             else {
                 currentCount = restOfString.substring(5, endOfCookie);
             }
-            console.log(document.cookie[5]);
             userCounter = parseInt(currentCount) + 1;
             setCookie('User', userCounter, 1);
         }
