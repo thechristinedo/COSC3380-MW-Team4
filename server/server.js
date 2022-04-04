@@ -2,9 +2,9 @@ const http = require('http');
 const fs = require('fs');
 const mysql = require('./node_modules/mysql');
 
-const { hostname, port } = require('./src/contants');
+const { hostname, port, pages_path } = require('./src/contants');
 
-//Create connection
+//Create connection to our database
 const connection = mysql.createConnection({
   host     : 'cosc3380-mw-team4.ce2wtehy81sy.us-east-1.rds.amazonaws.com',
   port : '3380',
@@ -29,7 +29,7 @@ async function handle_post_requests(request, response) {
                 response.end();
                 throw error;
             }
-            if (Object.keys(results).length === 0) {
+            if (Object.keys(results).length === 0) { // Username/Password combo not found in database
                 response.writeHead(200);
                 response.write(JSON.stringify({'Accepted': false}));
                 response.end();
@@ -56,34 +56,43 @@ async function handle_post_requests(request, response) {
 // through this function.
 async function server_handler(request, response) {
     if (request.url === '/' ) { // Default to index page?
-        file_path = './index.html';
+        file_path = pages_path + '/html/index.html';
         content_type = 'text/html';
     }
-    else if (request.url.substr(0,8) === '/posts' || request.method === 'POST') {
+    else if (request.url.substr(0,6) === '/posts' || request.method === 'POST') {
         handle_post_requests(request, response);
         return;
     }
     else { // Likely a request for a specific resource
-        file_path = '.' + request.url;
         const extension = request.url.split('.').pop(); // gives us the last string preceeded by ".", should be file extension
         if (extension === 'css') {
             content_type = 'text/css';
+            file_path = pages_path + request.url;
         }
         else if (extension === 'js') {
             content_type = 'text/javascript';
+            file_path = pages_path + request.url;
         }
         else if (extension === 'png') {
             content_type = 'image/png';  
+            file_path = pages_path + '/data/' + request.url;
         }
         else if (extension === 'json') {
             content_type = 'application/json'
+            file_path = pages_path + '/data/' + request.url;
+        }
+        else if (extension === 'ico') {
+            content_type = 'image/x-icon'
+            file_path = pages_path + '/data/' + request.url;
         }
         else {
             content_type = 'text/plain';
+            file_path = pages_path + '/src/' + request.url;
         }
     }
     fs.readFile(file_path, function (err, content) {
         if (err) {
+            console.log(err);
             response.writeHead(404);
             response.end();
             return;
@@ -98,12 +107,12 @@ http.createServer(server_handler).listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`)
 });
 
-connection.query('SELECT * FROM `SONG`', function (error, results) {
-    if (error){                     // error will be an Error if one occurred during the query
-        console.log('Error');
-        throw error;
-    }
-    console.log(results);    // results will contain the results of the query
-  });
+// connection.query('SELECT * FROM `SONG`', function (error, results) {
+//     if (error){                     // error will be an Error if one occurred during the query
+//         console.log('Error');
+//         throw error;
+//     }
+//     console.log(results);    // results will contain the results of the query
+//   });
 
 // connection.end();
