@@ -132,12 +132,11 @@ async function handle_posts_requests(request, response) {
                 throw error;
             }
             else {
-                let body;
-                if (results.affectedRows != 0 && results.changedRows != 0) {
+                if (results.affectedRows != 0 || results.changedRows != 0) {
                     await handle_song_rating_update(rating_info.SongID, response);
                     return;
                 }
-                body = {Modified: false};
+                const body = {Modified: false};
                 
                 response.writeHead(200);
                 response.write(JSON.stringify(body));
