@@ -5,6 +5,27 @@ const signupButton = document.querySelector("label.signup");
 const loginRedirect = document.querySelector("#submit-btn");
 const signupLink = document.querySelector("form .signup-link a");
 
+function setCookie(name, value, days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path =/";
+}
+
+async function postLogin(data) {
+    const response = await fetch('/posts/requests', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application.json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json();
+}
+
 signupButton.onclick = (()=> {
     loginForm.style.marginLeft = "-50%";
     loginText.style.marginLeft = "-50%";
@@ -26,5 +47,5 @@ loginRedirect.onclick = (()=> {
         if password user doesn't exist in database, then render error banner
         else link to user's page
     */
-    location.href = "https://github.com/alisonix/COSC3380-MW-Team4/blob/508dff5c02bf4aecb75b5da31eee0a7e65ab59e1/webpages/html/user.html";
+    location.href = "/user/";
 });

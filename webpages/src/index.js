@@ -11,7 +11,7 @@ function setCookie(name, value, days) {
 }
 
 async function postLogin(data) {
-    const response = await fetch('/posts/login', {
+    const response = await fetch('/requests/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application.json'
