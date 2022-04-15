@@ -3,7 +3,6 @@ const fs = require('fs');
 const mysql = require('./node_modules/mysql');
 
 const { hostname, port, pages_path } = require('./src/contants');
-const { connect } = require('http2');
 
 //Create connection to our database
 const connection = mysql.createConnection({
@@ -44,12 +43,21 @@ async function handle_song_rating_update(song_id, response) {
     });
 }
 
+/**
+ *  This function is used to handle all urls sent to the server that begin with "/requests". This
+ *  URL is EXCLUSIVELY used with fetch() on the frontend to tell the server to expect to receive JSON
+ *  information and to react to that JSON.
+ * @param {*} request 
+ * @param {*} response 
+ */
 async function handle_posts_requests(request, response) {
+    // This section is for handling a longin request which conists of a username and password.
     if (request.url === '/requests/login') {
         const buffers = [];    
         for await (const chunk of request) {
             buffers.push(chunk);
         }
+        // user_info = {Username, Password}
         const user_info = JSON.parse(buffers.toString());
         const query = `SELECT id FROM USER WHERE (name="${user_info.Username}" AND password="${user_info.Password}")`
         connection.query(query, (error, results) => {
@@ -66,6 +74,7 @@ async function handle_posts_requests(request, response) {
             }
             else {
                 response.writeHead(200);
+                // results: Array['0': {id}] (first key is referenced as below, I know it's weird)
                 response.write(JSON.stringify({'Accepted': true, 'UserID': results['0'].id}));
                 response.end();
             }
@@ -77,6 +86,7 @@ async function handle_posts_requests(request, response) {
             for await (const chunk of request) {
                 buffers.push(chunk);
             }
+            // user_id: {UserID}
             const user_id = JSON.parse(buffers.toString());
             const first_query = 'SELECT id, title, rating FROM SONG';
             const second_query = `SELECT song_id, rating FROM RATING WHERE (user_id = ${user_id.UserID})`
@@ -96,6 +106,8 @@ async function handle_posts_requests(request, response) {
                     }
                     else {
                         const rows = {Songs: [], Ratings: []};
+                        // first_results is an array of info that looks like:
+                        // RowDataPacket {id, title, rating} NOTE: these are the fields requested in second_query!
                         for (const row of first_results) {
                             rows.Songs.push(row);
                         }
@@ -116,12 +128,13 @@ async function handle_posts_requests(request, response) {
         for await (const chunk of request) {
             buffers.push(chunk);
         }
+        // rating_info = {UserID, SongID, Rating, WasRated} (see songs.js)
         rating_info = JSON.parse(buffers.toString());
         var query;
-        if (rating_info.WasRated) {
+        if (rating_info.WasRated) { // If user has already rated, then we need to updat3
             query = construct_update_rating(rating_info);
         }
-        else {
+        else {                       // Otherwise, we need to insert
             query = construct_insert_rating(rating_info);
         }
         connection.query(query, async (error, results) => {
@@ -133,9 +146,11 @@ async function handle_posts_requests(request, response) {
             }
             else {
                 if (results.affectedRows != 0 || results.changedRows != 0) {
+                    // If we have changed data, we need to update the frontend.
                     await handle_song_rating_update(rating_info.SongID, response);
                     return;
                 }
+                // Otherwise, we notify the frontend that no data has been changed.
                 const body = {Modified: false};
                 
                 response.writeHead(200);
@@ -149,24 +164,25 @@ async function handle_posts_requests(request, response) {
         for await (const chunk of request) {
             buffers.push(chunk);
         }
-        console.log(JSON.parse(buffers.toString()));
         response.write(JSON.stringify({'Accepted': false}))
         response.end();
     }
 }
 
 // Main function body of our server. All requests to our webpage are routed
-// through this function.
+// through this function. We use fetch() in our frontend javascript to send a URL
+// and other info to the server. For example, if the request is "/songs", then it
+// will load the first elseif statement below
 async function server_handler(request, response) {
     if (request.url === '/' ) { // Default to index page?
-        file_path = pages_path + '/html/register.html';
+        file_path = pages_path + '/html/index.html';
         content_type = 'text/html';
     }
     else if (request.url === '/songs') {
         file_path = pages_path + '/html/songs.html'
         content_type = 'text/html';
     }
-    else if (request.url.substr(0,6) === '/requests' || request.method === 'POST') {
+    else if (request.url.substr(0,9) === '/requests') {
         handle_posts_requests(request, response);
         return;
     }
@@ -209,13 +225,3 @@ async function server_handler(request, response) {
 http.createServer(server_handler).listen(port, hostname, () => {
     console.log(`Server is running on http://${hostname}:${port}`)
 });
-
-// connection.query('SELECT * FROM `SONG`', function (error, results) {
-//     if (error){                     // error will be an Error if one occurred during the query
-//         console.log('Error');
-//         throw error;
-//     }
-//     console.log(results);    // results will contain the results of the query
-//   });
-
-// connection.end();
