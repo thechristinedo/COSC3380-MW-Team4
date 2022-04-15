@@ -11,6 +11,7 @@ async function get_songs(data) {
     return response.json();
 }
 
+// data = {UserID, SongID, Rating, WasRated} (see where this is called)
 async function rate_song(data) {
     let response = await fetch('/requests/rating', {
         method: 'POST',
@@ -57,14 +58,13 @@ get_songs({UserID: user_id}).then(results => {
     // song_info: {id, title, rating}
     for (const song_info of results.Songs) {
         const li = document.createElement('li');
-        const unique_id = song_info.title + '    ' +  song_info.id.toString();
+        const unique_id = song_info.id.toString();
         li.setAttribute('id', unique_id);
 
         const select = get_rating_options();
         const button = get_rating_button();
 
         let wasRated = false;
-        const body = `Title: ${song_info.title}, Rating: ${song_info.rating}\t`
         // rating info: {song_id,  rating}
         for (const rating_info of results.Ratings) {
             if (rating_info.song_id === song_info.id) {
@@ -72,12 +72,14 @@ get_songs({UserID: user_id}).then(results => {
                 wasRated = true;
             }
         }
+        const body = `Title: ${song_info.title}, Rating: ${song_info.rating}\t`
         li.innerHTML = body;
         li.appendChild(select);
         button.addEventListener('click', () => {
             const rating = select.value;
             rate_song({UserID: user_id, SongID: song_info.id, Rating: rating, WasRated: wasRated})
             .then( (response) => {
+                // response = {Modified, NewRating}
                 if (response.Modified) {
                     wasRated = true;
                     const newBody = `Title: ${song_info.title}, Rating: ${response.NewRating}\t`
