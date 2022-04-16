@@ -15,17 +15,6 @@ function setCookie(name, value, days) {
     document.cookie = name + "=" + value + expires + "; path =/";
 }
 
-async function postLogin(data) {
-    const response = await fetch('/posts/requests', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application.json'
-        },
-        body: JSON.stringify(data)
-    })
-    return response.json();
-}
-
 signupButton.onclick = (()=> {
     loginForm.style.marginLeft = "-50%";
     loginText.style.marginLeft = "-50%";
@@ -41,17 +30,19 @@ signupLink.onclick = (()=>{
     return false;
 });
 
-loginRedirect.onclick = (()=> {
-    /* 
-        use conditional logic to check if login text & login password exist in database 
-        if password user doesn't exist in database, then render error banner
-        else link to user's page
-    */
-    location.href = "/user/";
-});
-
 async function postSignup(data) {
     const response = await fetch('/requests/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application.json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json();
+}
+
+async function postLogin(data) {
+    const response = await fetch('/requests/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application.json'
@@ -84,6 +75,31 @@ const handle_signup = (event) => {
         }
         else {
             alert("This username already exists!");    
+        }
+    })
+    return false;
+}
+
+const handle_login = (event) => {
+    const cd = document.cookie;
+    const form = new FormData(event.target);
+    const username = form.get("uname");
+    const password = form.get("psw");
+    const remember = form.get("remember")
+    
+    const response = postLogin({Username: username, Password: password});
+    response.then(data => {
+        // Data will be an object with one or two keys. It has Accepted, a boolean indicating if
+        // the login request is accepted. If it is, then the object also has the key UserID, corresponding 
+        // to the ID of the user in the database internally. This is insanely insecure but will work for our
+        // demo.
+        if (data.Accepted) {
+            setCookie("UserID", data.UserID, 1);
+            // Put logic for loading user profile page here
+            window.location.href = "/user";
+        }
+        else {
+            alert("Sorry that username or password was incorrect!")    
         }
     })
     return false;
