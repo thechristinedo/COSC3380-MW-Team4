@@ -22,12 +22,12 @@
                     <div class="slider-tab"></div>
                 </div>
                 <div class="form-inner">
-                    <form action="#" class="login">
+                    <form action="#" class="login" onsubmit="return handle_login(event)" method="post">
                         <div class="field">
-                            <input type="text" placeholder="Username" required>
+                            <input type="text" placeholder="Username" name="uname" required>
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Password" required>
+                            <input type="password" placeholder="Password" name="psw" required>
                         </div>
                         <div class="underlogin">
                             <div class="pass-link"><a href="#">Forgot Password?</a></div>

@@ -188,6 +188,7 @@ async function handle_posts_requests(request, response) {
 // Main function body of our server. All requests to our webpage are routed
 // through this function.
 async function server_handler(request, response) {
+    console.log(request.url);
     if (request.url === '/' ) { // Default to index page?
         file_path = pages_path + '/html/register.html';
         content_type = 'text/html';
