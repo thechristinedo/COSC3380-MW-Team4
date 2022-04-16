@@ -16,3 +16,12 @@ for (let el of tabLinks) {
     panel[0].classList.add("active");
     });
   }
+
+function deleteCookie(name) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
+const handle_logout = (event) => {
+    deleteCookie("UserID");
+    window.location.href = "/";
+}

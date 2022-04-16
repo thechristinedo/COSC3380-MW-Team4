@@ -46,15 +46,15 @@
                         <div class="signup-link"> Not A Member? <a href="#">Sign Up Now!</a>
                         </div>
                     </form>
-                    <form action="#" class = "signup">
+                    <form action="#" onsubmit="return handle_signup(event)" method="post">
                         <div class="field">
-                            <input type="text" placeholder="Username" required>
+                            <input type="text" placeholder="Username" name="username" required>
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Password" required>
+                            <input type="password" placeholder="Password" name="password" required>
                         </div>
                         <div class="field">
-                            <input type="password" placeholder="Confirm Password" required>
+                            <input type="password" placeholder="Confirm Password" name="re_password" required>
                         </div>
                         <div class="field btn">
                             <div class="btn-layer"></div>

@@ -49,3 +49,42 @@ loginRedirect.onclick = (()=> {
     */
     location.href = "/user/";
 });
+
+async function postSignup(data) {
+    const response = await fetch('/requests/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application.json'
+        },
+        body: JSON.stringify(data)
+    })
+    return response.json();
+}
+
+const handle_signup = (event) => {
+    const form = new FormData(event.target);
+    const username = form.get("username");
+    const password = form.get("password");
+    const re_password = form.get("re_password");
+
+    if (password !== re_password) {
+        alert("Passwords don't match!");
+        return false;
+    }
+
+    const response = postSignup({Username: username, Password: password});
+    response.then(data => {
+        // Data will be an object with one or two keys. It has Accepted, a boolean indicating if
+        // the signup request is accepted. If it is, then the object also has the key UserID, corresponding 
+        // to the ID of the user in the database internally. This is insanely insecure but will work for our
+        // demo.
+        if (data.Accepted) {
+            setCookie("UserID", data.UserID, 1);
+            window.location.href = "/user";
+        }
+        else {
+            alert("This username already exists!");    
+        }
+    })
+    return false;
+}
